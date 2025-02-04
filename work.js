@@ -5,6 +5,12 @@ const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 let students = [];
+document.addEventListener('DOMContentLoaded', () => {
+    initDB();
+    initializeDataPersistence();
+    setupRealTimeUpdates(); // Set up real-time updates
+});
+
 let currentStudentNumber = 20240001;
 let schoolFees = {};
 let db;
@@ -24,7 +30,49 @@ function initDB() {
         console.log("Database ready");
         loadDataFromDB(); // Load existing data once DB is ready
     };
-
+function setupRealTimeUpdates() {
+    supabase
+        .from('students')
+        .on('INSERT', payload => {
+            console.log('New student added:', payload.new);
+            // Update your UI to reflect the new student
+        })
+        .on('UPDATE', payload => {
+            console.log('Student updated:', payload.new);
+            // Update your UI to reflect the updated student
+        })
+        .on('DELETE', payload => {
+            console.log('Student deleted:', payload.old);
+            // Remove the student from your UI
+        })
+        .subscribe();
+}function setupRealTimeUpdates() {
+    supabase
+        .from('students')
+        .on('INSERT', payload => {
+            console.log('New student added:', payload.new);
+            // Update your UI to reflect the new student
+        })
+        .on('UPDATE', payload => {
+            console.log('Student updated:', payload.new);
+            // Update your UI to reflect the updated student
+        })
+        .on('DELETE', payload => {
+            console.log('Student deleted:', payload.old);
+            // Remove the student from your UI
+        })
+        .subscribe();
+}window.onload = function() {
+    initDB();
+    initializeDataPersistence();
+    setupRealTimeUpdates(); // Set up real-time updates
+};
+<script type="module" src="work.js"></script> 
+document.addEventListener('DOMContentLoaded', () => {
+    initDB();
+    initializeDataPersistence();
+    setupRealTimeUpdates(); // Set up real-time updates
+});
     request.onupgradeneeded = function(event) {
         db = event.target.result;
         
